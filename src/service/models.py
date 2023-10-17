@@ -1,20 +1,6 @@
 from django.db import models
 from contest.models import  Mootcourt
-from users.models import CustomUser
-
-
-class Teaser(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    publication_date = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    background = models.CharField(max_length=255)
-    image = models.URLField()
-    link = models.URLField()
-    mootcourt = models.ForeignKey(Mootcourt, on_delete=models.CASCADE, related_name='teasers')
-
-    def __str__(self):
-        return self.title
+from users.models import Profile
 
 
 class Document(models.Model):
@@ -22,8 +8,8 @@ class Document(models.Model):
     types = ['Fabula', 'Reglament', 'File', 'Procedural Document', 'Result of moot court']
 
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    document_type = models.CharField(max_length=5, choices=types)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    document_type = models.CharField(max_length=25, choices=types)
     file_name = models.CharField(max_length=255)
     icon = models.FileField(upload_to='icons/')
     file = models.FileField(upload_to='documents/')
@@ -40,7 +26,7 @@ class Message(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_published = models.DateTimeField()
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     text = models.TextField()
     recipient = models.CharField(max_length=5, choices=roles, default='Part')
     documents = models.ManyToManyField('Document', blank=True)
@@ -55,7 +41,7 @@ class Event(models.Model):
              'Online conference', 'Summary or Conclusion']
 
     date_created = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
     title = models.CharField(max_length=255)

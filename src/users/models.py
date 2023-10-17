@@ -9,7 +9,7 @@ from django.urls import reverse
 
 
 # Создайте менеджер пользователя
-class CustomUserManager(BaseUserManager):
+class ProfileManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
@@ -27,13 +27,13 @@ class CustomUserManager(BaseUserManager):
 
 
 # Определите модель пользователя
-class CustomUser(AbstractBaseUser):
+class Profile(AbstractBaseUser):
 
     roles = [
-        ('Organ', 'University/organization'),
-        ('Part', 'Participant'),
-        ('Coach', 'Coach'),
-        ('Ref', 'Referee')
+        ('organization', 'University/organization'),
+        ('participant', 'Participant'),
+        ('coach', 'Coach'),
+        ('referee', 'Referee')
     ]
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,7 +51,7 @@ class CustomUser(AbstractBaseUser):
     role = models.CharField(max_length=5, choices=roles, default='Part')
     status = models.CharField(max_length=8, default='Inactive')
 
-    objects = CustomUserManager()
+    objects = ProfileManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -65,12 +65,12 @@ class Team(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     logo = models.ImageField(upload_to='team_logos/', blank=True, null=True)
-    organization = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='organizations')
+    organization = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='organizations')
     verified_by_organization = models.BooleanField(default=False)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_teams')
-    captain = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='captain_of_teams')
-    coaches = models.ManyToManyField(CustomUser, related_name='teams_coached', blank=True)
-    members = models.ManyToManyField(CustomUser, related_name='teams_as_member', blank=True)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_teams')
+    captain = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='captain_of_teams')
+    coaches = models.ManyToManyField(Profile, related_name='teams_coached', blank=True)
+    members = models.ManyToManyField(Profile, related_name='teams_as_member', blank=True)
     rating = models.FloatField(blank=True, null=True)
     status = models.CharField(max_length=8, default='Inactive')
 
