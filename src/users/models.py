@@ -1,11 +1,7 @@
 from django.db import models
-
-# Create your models here.
-
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.core.validators import FileExtensionValidator
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 # Создайте менеджер пользователя
@@ -36,20 +32,20 @@ class Profile(AbstractBaseUser):
         ('referee', 'Referee')
     ]
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    first_name = models.CharField(max_length=255)
-    position = models.CharField(max_length=255, blank=True)
-    photo = models.ImageField(upload_to='user_photos/', blank=True)
-    description = models.TextField(blank=True)
-    university_name = models.CharField(max_length=255, blank=True)
-    university_link = models.URLField(blank=True)
-    accept_team_invitations = models.BooleanField(default=False)
-    verified_user = models.BooleanField(default=False)
-    rating = models.FloatField(null=True, blank=True)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20)
-    role = models.CharField(max_length=5, choices=roles, default='Part')
-    status = models.CharField(max_length=8, default='Inactive')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation Date'))
+    first_name = models.CharField(max_length=255, verbose_name=_('First name'))
+    position = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Position'))
+    photo = models.ImageField(upload_to='user_photos/', null=True, blank=True, verbose_name=_('Photo'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
+    university_name = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('University'))
+    university_link = models.URLField(null=True, blank=True, verbose_name=_('University link'))
+    accept_team_invitations = models.BooleanField(default=False, verbose_name=_('Accept team invitation'))
+    verified_user = models.BooleanField(default=False, verbose_name=_('Verified user'))
+    rating = models.FloatField(null=True, blank=True, verbose_name=_('Rating'))
+    email = models.EmailField(unique=True, verbose_name=_('Email'))
+    phone = models.CharField(max_length=20, verbose_name=_('Phone number'))
+    role = models.CharField(max_length=15, choices=roles, default='participant', verbose_name=_('Role'))
+    status = models.CharField(max_length=8, default='Inactive', verbose_name=_('Status'))
 
     objects = ProfileManager()
 
@@ -63,15 +59,15 @@ class Profile(AbstractBaseUser):
 class Team(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    logo = models.ImageField(upload_to='team_logos/', blank=True, null=True)
+    description = models.TextField(null=True, blank=True,)
+    logo = models.ImageField(upload_to='team_logos/', null=True, blank=True,)
     organization = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='organizations')
     verified_by_organization = models.BooleanField(default=False)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_teams')
-    captain = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='captain_of_teams')
-    coaches = models.ManyToManyField(Profile, related_name='teams_coached', blank=True)
-    members = models.ManyToManyField(Profile, related_name='teams_as_member', blank=True)
-    rating = models.FloatField(blank=True, null=True)
+    captain = models.ForeignKey(Profile, on_delete=models.SET_NULL, related_name='captain_of_teams')
+    coaches = models.ManyToManyField(Profile, related_name='teams_coached', null=True, blank=True)
+    members = models.ManyToManyField(Profile, related_name='teams_as_member', null=True, blank=True)
+    rating = models.FloatField(null=True, blank=True,)
     status = models.CharField(max_length=8, default='Inactive')
 
     def __str__(self):
