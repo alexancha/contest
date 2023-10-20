@@ -1,5 +1,4 @@
 from django.db import models
-from contest.models import Mootcourt
 from users.models import Profile
 from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +30,7 @@ class Message(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Author'))
     text = models.TextField(verbose_name=_('Text'))
     recipient = models.CharField(max_length=15, choices=roles, default='participant', verbose_name=_('Recipient'))
-    documents = models.ManyToManyField('Document', null=True, blank=True, verbose_name=_('Documents'))
+    documents = models.ManyToManyField('Document', verbose_name=_('Documents'))
 
     def __str__(self):
         return f"Message by {self.author} - {self.date_created}"
@@ -56,3 +55,11 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Tag(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+
+
+class Channel(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
