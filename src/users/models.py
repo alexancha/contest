@@ -32,7 +32,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     ]
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation Date'))
-    first_name = models.CharField(max_length=255, verbose_name=_('First name'))
+    first_name = models.CharField(max_length=255, verbose_name=_('Name'))
     position = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Position'))
     photo = models.ImageField(upload_to='user_photos/', null=True, blank=True, verbose_name=_('Photo'))
     description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
@@ -43,7 +43,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     rating = models.FloatField(null=True, blank=True, verbose_name=_('Rating'))
     email = models.EmailField(unique=True, verbose_name=_('Email'))
     phone = models.CharField(max_length=20, verbose_name=_('Phone number'))
-    role = models.CharField(max_length=15, choices=roles, default='participant', verbose_name=_('Role'))
+    role = models.CharField(max_length=15, choices=roles, verbose_name=_('Role'))
     status = models.CharField(max_length=8, default='Inactive', verbose_name=_('Status'))
     is_staff = models.BooleanField(default=False)
 
@@ -68,6 +68,13 @@ class OrganizationProfile(Profile):
         proxy = True
         verbose_name = "University/Organization"
         verbose_name_plural = "Universities/Organizations"
+
+
+class ParticipantProfile(Profile):
+    class Meta:
+        proxy = True
+        verbose_name = "Participant"
+        verbose_name_plural = "Participants"
 
 
 class Team(models.Model):
