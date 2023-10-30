@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from users.models import Profile
 from django.utils.translation import gettext_lazy as _
 
@@ -8,7 +10,7 @@ class Document(models.Model):
     types = [('fabula', 'Fabula'), ('reglament', 'Reglament'), ('file', 'File'),
              ('procedural_document', 'Procedural document'), ('result_of_mootcourt', 'Result of moot court')]
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_('Creation Date'))
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Author'))
     document_type = models.CharField(max_length=25, choices=types, verbose_name=_('Document type'))
     file_name = models.CharField(max_length=255, verbose_name=_('File name'))
@@ -25,7 +27,7 @@ class Message(models.Model):
         ('referee', 'Referee')
     ]
 
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_('Creation Date'))
     date_published = models.DateTimeField(auto_now_add=True, verbose_name=_('Publication Date'))
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Author'))
     text = models.TextField(verbose_name=_('Text'))
@@ -33,7 +35,7 @@ class Message(models.Model):
     documents = models.ManyToManyField('Document', verbose_name=_('Documents'))
 
     def __str__(self):
-        return f"Message by {self.author} - {self.date_created}"
+        return f"Message by {self.author} - {self.created_at}"
 
 
 class Event(models.Model):
@@ -41,7 +43,7 @@ class Event(models.Model):
     types = [('registration', 'Registration of participants'), ('document_upload', 'Document upload'),
              ('online_conference', 'Online conference'), ('summarizing', 'Summarizing')]
 
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_('Creation Date'))
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Author'))
     start_date = models.DateTimeField(verbose_name=_('Start'))
     end_date = models.DateTimeField(null=True, blank=True, verbose_name=_('End'))
@@ -57,9 +59,5 @@ class Event(models.Model):
         return self.title
 
 
-class Tag(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
-
-
 class Channel(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation date'))
+    created_at = models.DateTimeField(default=timezone.now, verbose_name=_('Creation Date'))
