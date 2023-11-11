@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 
 class ProfileManager(BaseUserManager):
@@ -19,6 +20,7 @@ class ProfileManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
 
         return self.create_user(email, password, **extra_fields)
 
@@ -51,6 +53,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=15, choices=roles, verbose_name=_('Role'))
     status = models.CharField(max_length=8, choices=Status, default='inactive', verbose_name=_('Status'))
     is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     objects = ProfileManager()
 

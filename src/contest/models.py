@@ -6,6 +6,7 @@ from guides.models import Tag
 from django.utils.translation import gettext_lazy as _
 
 
+
 class Mootcourt(models.Model):
     Status = [
         ('active', 'Active'),
