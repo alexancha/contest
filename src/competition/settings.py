@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-#kwag%ao_0j(@vq*446zh(-@li#-q8$&lpsuf^pz=5n1jkoubh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+
 
 
 # Application definition
@@ -81,14 +82,14 @@ WSGI_APPLICATION = 'competition.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mootcourt',
+        'NAME': 'mootcourt_test',
         'USER': 'postgres',
         'PASSWORD': '9051124',
-        'HOST': 'db',
-        # 'HOST': '127.0.0.1',
+        'HOST': '127.0.0.1',
         'PORT': '5432'
     }
 }
@@ -146,11 +147,16 @@ AUTH_USER_MODEL = 'users.Profile'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=100),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -191,7 +197,7 @@ SIMPLE_JWT = {
 
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Вывод писем в консоль
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Вывод писем в консоль
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.yandex.ru'

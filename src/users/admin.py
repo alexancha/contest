@@ -84,7 +84,7 @@ class TeamAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         print(db_field.name)
         if db_field.name == 'organization':
-            kwargs['queryset'] = Profile.objects.filter(role="organization").values_list('university_name', flat=True)
+            kwargs['queryset'] = Profile.objects.filter(role="organization")
         if db_field.name == 'owner':
             kwargs['queryset'] = Profile.objects.filter(role="participant")
         if db_field.name == 'captain':

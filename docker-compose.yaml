@@ -1,16 +1,19 @@
 version: '3'
 
 services:
-  db:
+  postgres:
     image: postgres
     environment:
-      POSTGRES_DB: mootcourt
+      POSTGRES_DB: mootcourt_test
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 9051124
+    ports:
+      - "5432:5432"
+
 
   web:
     build: .
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres

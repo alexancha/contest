@@ -2,12 +2,14 @@ from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect
 from djoser import utils
 
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from contest.models import Mootcourt
 from .models import Profile
 from .serializers import ProfileSerializer, RegistrationcompleteSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -54,3 +56,6 @@ class ActivateAccountView(APIView):
                     'access': str(refresh.access_token),
                 })
         return Response({'message': 'Invalid activation link.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+

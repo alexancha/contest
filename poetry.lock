@@ -336,6 +336,50 @@ djet = ["djet (>=0.3.0,<0.4.0)"]
 webauthn = ["webauthn (<1.0)"]
 
 [[package]]
+name = "drf-base64"
+version = "2.0"
+description = "DRF serializers to handle base64-encoded files"
+optional = false
+python-versions = "*"
+files = [
+    {file = "drf_base64-2.0.tar.gz", hash = "sha256:dee42f27e6ea5fb91ff85916ad1aaba222275552815430ff6a55a547e0246234"},
+]
+
+[package.dependencies]
+Django = ">=2.0"
+djangorestframework = "<4.0.0"
+
+[[package]]
+name = "drf-extra-fields"
+version = "3.7.0"
+description = "Additional fields for Django Rest Framework."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "drf-extra-fields-3.7.0.tar.gz", hash = "sha256:d7e58b8f60432233328b8a64831e50ea5d05932d3cb63ade8fe66c0d3d21ac5b"},
+    {file = "drf_extra_fields-3.7.0-py3-none-any.whl", hash = "sha256:3f3b1a6ec0eea02c9cabd62fe10e1673e1e42c5daa27fa9d4cea758c52c5cc30"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+djangorestframework = ">=3.9.2"
+filetype = ">=1.2.0"
+
+[package.extras]
+base64imagefield = ["Pillow (>=6.2.1)"]
+
+[[package]]
+name = "filetype"
+version = "1.2.0"
+description = "Infer file type and MIME type of any file/buffer. No external dependencies."
+optional = false
+python-versions = "*"
+files = [
+    {file = "filetype-1.2.0-py2.py3-none-any.whl", hash = "sha256:7ce71b6880181241cf7ac8697a2f1eb6a8bd9b429f7ad6d27b8db9ba5f1c2d25"},
+    {file = "filetype-1.2.0.tar.gz", hash = "sha256:66b56cd6474bf41d8c54660347d37afcc3f7d1970648de365c102ef77548aadb"},
+]
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -634,4 +678,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0b0ae0af08d2ae4530e7253ece664f1f535b526a4a59542a3a989262e8c70d83"
+content-hash = "4caeb4990a9802fec65b72a69b53e42b57f38119f46d489aa7ddb69e786ea15a"

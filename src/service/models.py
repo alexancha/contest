@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from filetype import filetype
 
 from users.models import Profile
 from django.utils.translation import gettext_lazy as _
@@ -14,9 +15,21 @@ class Document(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name=_('Author'))
     document_type = models.CharField(max_length=25, choices=types, verbose_name=_('Document type'))
     file_name = models.CharField(max_length=255, verbose_name=_('File name'))
-    icon = models.FileField(upload_to='icons/', verbose_name=_('Icon'))
-    file = models.FileField(upload_to='documents/', verbose_name=_('File'))
+    icon = models.FileField(upload_to='icons/', verbose_name=_('Icon'), blank=True)
+    file = models.FileField(upload_to='documents/', verbose_name=_('File'), blank=True)
 
+    def save(self, *args, **kwargs):
+        if filetype.guess(self.file).extension in ["doc", "docx"]:
+            self.icon = "icons/word.png"
+        if filetype.guess(self.file).extension in ["xls", "xlsx"]:
+            self.icon = "icons/excel.png"
+        if filetype.guess(self.file).extension == "pdf":
+            self.icon = "icons/pdf.png"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.file_name
 
 class Message(models.Model):
 
@@ -50,8 +63,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     description = models.TextField(verbose_name=_('Description'))
     event_type = models.CharField(max_length=50, choices=types, verbose_name=_('Event type'))
-    file = models.ForeignKey('Document', null=True, blank=True,
-                             on_delete=models.SET_NULL, verbose_name=_('Documents'))
+    file = models.ManyToManyField('Document', blank=True, verbose_name=_('Documents'))
     scheduled_video_conference_url = models.URLField(null=True, blank=True, verbose_name=_('Videoconference'))
     online_stream_url = models.URLField(null=True, blank=True, verbose_name=_('Stream'))
 
